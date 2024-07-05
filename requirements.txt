@@ -5,9 +5,5 @@ numpy
 opencv-python
 Pillow
 matplotlib
-pandas
-imutils
 mediapipe
 matplotlib 
-scikit-learn
-dlib
