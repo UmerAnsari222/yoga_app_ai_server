@@ -27,18 +27,54 @@ def analyze_yoga():
     fps = cap.get(cv2.CAP_PROP_FPS)
     results = []
 
-    while True:
-        ret, frame = cap.read()
-        if not ret:
-            break
+    try:
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                break
 
-        result_frame = yoga_analyzer.analyze_pose(frame)
-        results.append(yoga_analyzer.get_results())
-
-    cap.release()
-    os.remove(video_path)
+            result_frame = yoga_analyzer.analyze_pose(frame)
+            results.append(yoga_analyzer.get_results())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cap.release()
+        os.remove(video_path)
 
     return jsonify(results)
+
+
+# @app.route('/analyze_yoga', methods=['POST'])
+# def analyze_yoga():
+#     if 'video' not in request.files:
+#         return jsonify({"error": "No video file provided"}), 400
+
+#     video_file = request.files['video']
+#     video_path = os.path.join("temp", video_file.filename)
+#     video_file.save(video_path)
+
+#     cap = cv2.VideoCapture(video_path)
+
+#     if not cap.isOpened():
+#         return jsonify({"error": "Could not open video file"}), 400
+
+#     yoga_analyzer = YogaAnalyzer()
+
+#     fps = cap.get(cv2.CAP_PROP_FPS)
+#     results = []
+
+#     while True:
+#         ret, frame = cap.read()
+#         if not ret:
+#             break
+
+#         result_frame = yoga_analyzer.analyze_pose(frame)
+#         results.append(yoga_analyzer.get_results())
+
+#     cap.release()
+#     os.remove(video_path)
+
+#     return jsonify(results)
 
 
 @app.route('/analyze_yoga2', methods=['GET'])
